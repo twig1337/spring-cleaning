@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# This script will run a full update and distrobution upgrade along with an
+# autoremove and auto clean. It will also remove all Linux kernels except for
+# the current kernel being used and a single backup kernel.
+
+sudo apt-get update &&
+sudo apt-get dist-upgrade -y &&
+sudo apt-get autoremove -qy --purge &&
+sudo apt-get autoclean &&
+
+# Purge old kernels.
+OLD=$( ls -tr /boot/vmlinuz-* | head -n -2 | cut -d- -f2- | awk '"'"'{print "linux-image-" $0}'"'"' )
+if [ -n "$OLD" ]; then
+  sudo apt-get -qy remove --purge $OLD;
+fi
+
+echo "Cleaning complete. You may need to restart to apply updates.";
