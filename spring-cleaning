@@ -6,13 +6,14 @@
 
 sudo apt-get update &&
 sudo apt-get dist-upgrade -y &&
-sudo apt-get autoremove -qy --purge &&
-sudo apt-get autoclean &&
 
 # Purge old kernels.
 OLD=$( ls -tr /boot/vmlinuz-* | head -n -2 | cut -d- -f2- | awk '"'"'{print "linux-image-" $0}'"'"' )
 if [ -n "$OLD" ]; then
   sudo apt-get -qy remove --purge $OLD;
 fi
+
+sudo apt-get autoremove -qy --purge &&
+sudo apt-get autoclean &&
 
 echo "Cleaning complete. You may need to restart to apply updates.";
